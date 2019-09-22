@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".EditActivity">
+
+    <item
+        android:id="@+id/acceptedit"
+        android:title="@string/aceptar"
+        android:orderInCategory="10"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/canceledit"
+        android:title="@string/cancelar"
+        android:orderInCategory="10"
+        app:showAsAction="always|withText" />
+
+</menu>

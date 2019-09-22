@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<RelativeLayout
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/firstResultsBox"
+        android:text="EJEMPLO1"
+        android:paddingTop="40dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:textSize="20dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/secondResultsBox"
+        android:layout_below="@id/firstResultsBox"
+        android:text="EJEMPLO2"
+        android:paddingTop="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="20dp"
+        android:gravity="center"
+        android:textSize="40dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/thirdResultsBox"
+        android:layout_below="@id/secondResultsBox"
+        android:textSize="15dp"
+        android:paddingTop="40dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonBack"
+        android:layout_below="@id/thirdResultsBox"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/ic_media_play"
+        app:fabSize="normal"
+        app:elevation="6dp"
+        app:pressedTranslationZ="6dp"
+        app:backgroundTint="@color/navigationBarColor"
+        app:rippleColor="@color/accent_material_light"
+        android:paddingRight="10dp"
+        app:borderWidth="0dp"
+        android:layout_margin="15dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/field4"
+        android:layout_below="@id/buttonBack"
+        android:textSize="15dp"
+        android:paddingTop="40dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonDetalleResults"
+        android:layout_below="@id/field4"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/ic_media_play"
+        app:fabSize="normal"
+        app:elevation="6dp"
+        app:pressedTranslationZ="6dp"
+        app:backgroundTint="@color/navigationBarColor"
+        app:rippleColor="@color/accent_material_light"
+        android:paddingRight="10dp"
+        app:borderWidth="0dp"
+        android:layout_margin="15dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/field5"
+        android:textSize="15dp"
+        android:layout_below="@id/buttonDetalleResults"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        />
+
+    </RelativeLayout>
+</ScrollView>

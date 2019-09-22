@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:stretchColumns="2, 3">
+
+    <!--Nota muy interesante: Para que las columnas se mantengan del
+    mismo grosor:
+    android:stretchColumns="2, 3" en el TableLayout,
+    y luego en el TableRow y los diferentes layouts que integren
+    la fila: android:layout_width="0dp"
+    Esto último es de vital importancia para que se tengan en cuenta los
+    layout:weight, si no es como si no se pusiera y no se tiene en cuenta.
+    Si alguna columna-->
+
+    <TableRow
+        android:layout_height="match_parent"
+        android:layout_width="0dp">
+
+        <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_column="1"
+        android:paddingLeft="3dp">
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/func"
+            android:text="Funcion nom"
+            android:textSize="15dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="start"
+        android:layout_column="2"
+        android:layout_toRightOf="@+id/func"
+        android:paddingLeft="20dp">
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/firstcol"
+            android:textSize="20dp"
+            android:text="Palabra"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/firstcol"
+        android:layout_column="3"
+        android:paddingLeft="5dp">
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/secondcol"
+            android:textSize="20dp"
+            android:text="Traduccion"/>
+    </LinearLayout>
+    </TableRow>
+
+</TableLayout>

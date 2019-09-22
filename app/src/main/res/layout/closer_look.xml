@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/moten1closer"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:paddingLeft="15dp"
+            android:textSize="22dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/tipocloser"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:paddingRight="10dp"
+            android:layout_alignParentRight="true"
+            android:textSize="22dp">
+        </TextView>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/moten2closer"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="18dp"
+            android:paddingLeft="30dp"
+            android:paddingBottom="10dp">
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/idiomacloser"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <TextView
+            android:id="@+id/notacloser"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:paddingLeft="10dp">
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/stop_button_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fabSize="normal"
+                app:elevation="6dp"
+                app:pressedTranslationZ="6dp"
+                app:backgroundTint="@color/navigationBarColor"
+                app:rippleColor="@color/accent_material_light"
+                android:paddingRight="10dp"
+                app:borderWidth="0dp"
+                android:layout_margin="15dp"
+                android:src="@android:drawable/checkbox_off_background" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/play_button_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fabSize="normal"
+                app:elevation="6dp"
+                app:pressedTranslationZ="6dp"
+                app:backgroundTint="@color/navigationBarColor"
+                app:rippleColor="@color/accent_material_light"
+                android:paddingRight="10dp"
+                app:borderWidth="0dp"
+                android:layout_margin="15dp"
+                android:layout_alignParentLeft="true"
+                android:src="@android:drawable/ic_media_play"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/record_button_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fabSize="normal"
+                app:elevation="6dp"
+                app:pressedTranslationZ="10dp"
+                app:backgroundTint="@color/navigationBarColor"
+                app:rippleColor="@color/accent_material_light"
+                android:paddingRight="10dp"
+                app:borderWidth="0dp"
+                android:layout_margin="15dp"
+                android:src="@android:drawable/ic_notification_overlay"/>
+        </LinearLayout>
+
+        <!--<RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:paddingRight="10dp">
+            <android.support.design.widget.FloatingActionButton
+                android:layout_alignParentRight="true"
+                android:id="@+id/picture_button_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_camera"
+                app:fabSize="normal"
+                app:elevation="6dp"
+                app:pressedTranslationZ="10dp"
+                app:backgroundTint="@color/navigationBarColor"
+                app:rippleColor="@color/accent_material_light"
+                app:borderWidth="0dp"
+                android:layout_margin="15dp"/>
+        </RelativeLayout>
+        -->
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/framePict"
+        android:gravity="right">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:paddingRight="7dp"
+            android:paddingLeft="20dp"
+            android:paddingBottom="20dp">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/botonQuitarSonido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/stat_notify_call_mute"
+                app:fabSize="mini"
+                app:elevation="6dp"
+                app:pressedTranslationZ="6dp"
+                app:backgroundTint="@color/darkred"
+                app:rippleColor="@color/accent_material_light"
+                app:borderWidth="0dp"
+                android:layout_margin="15dp"/>
+
+        </LinearLayout>
+
+        <!--
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:paddingRight="10dp"
+            android:paddingLeft="20dp"
+            android:paddingBottom="20dp"
+            android:orientation="vertical"
+            android:layout_alignParentRight="true">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/botonVer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_view"
+                app:fabSize="normal"
+                app:elevation="6dp"
+                app:pressedTranslationZ="6dp"
+                app:backgroundTint="@color/primary_dark_material_dark"
+                app:rippleColor="@color/accent_material_light"
+                app:borderWidth="0dp"
+                android:layout_margin="15dp"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/botonBorrar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_delete"
+                app:fabSize="mini"
+                app:elevation="6dp"
+                app:pressedTranslationZ="6dp"
+                app:backgroundTint="@color/darkred"
+                app:rippleColor="@color/accent_material_light"
+                app:borderWidth="0dp"
+                android:layout_margin="15dp"
+                />
+
+
+        </LinearLayout>
+
+    -->
+    </RelativeLayout>
+</LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,46 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".PreMainActivity">
+
+    <item
+        android:id="@+id/new_langue"
+        android:title="@string/añadirIdioma"
+        android:icon="@android:drawable/ic_menu_add"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/search_button"
+        android:title="@string/buscar"
+        android:icon="@android:drawable/ic_menu_search"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/export_button"
+        android:title="@string/guardar"
+        android:icon="@android:drawable/ic_menu_save"
+        android:orderInCategory="110"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/import_button"
+        android:title="@string/importar"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:orderInCategory="130"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/send_button"
+        android:title="@string/enviar"
+        android:icon="@android:drawable/ic_menu_send"
+        android:orderInCategory="150"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/help_button"
+        android:title="@string/ayuda"
+        android:icon="@android:drawable/ic_menu_help"
+        android:orderInCategory="200"
+        app:showAsAction="ifRoom"/>
+
+
+
+
+</menu>

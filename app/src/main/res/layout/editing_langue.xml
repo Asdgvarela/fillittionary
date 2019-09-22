@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/moten1text"
+            android:paddingTop="10dp"
+            android:text="@string/editPalabra"
+            android:paddingLeft="15dp"
+            android:textSize="25dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/moten1edit"
+            android:hint="@string/hintPalabra"
+            android:paddingLeft="15dp"
+            android:textSize="15dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/moten2text"
+            android:text="@string/editTraduccion"
+            android:paddingLeft="15dp"
+            android:textSize="25dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/moten2edit"
+            android:hint="@string/hintTraduccion"
+            android:paddingLeft="15dp"
+            android:textSize="15dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tipotext"
+            android:text="@string/editTipo"
+            android:paddingLeft="15dp"
+            android:textSize="25dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tipoedit"
+            android:hint="@string/hintTipo"
+            android:paddingLeft="15dp"
+            android:textSize="15dp"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/notatext"
+            android:text="@string/editNotas"
+            android:paddingLeft="15dp"
+            android:textSize="25dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/notaedit"
+            android:hint="@string/hintNotas"
+            android:paddingLeft="15dp"
+            android:textSize="15dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/idiomatext"
+            android:text="@string/editIdioma"
+            android:paddingLeft="15dp"
+            android:textSize="25dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/idiomaedit"
+            android:hint="@string/hintidioma"
+            android:paddingLeft="15dp"
+            android:textSize="15dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

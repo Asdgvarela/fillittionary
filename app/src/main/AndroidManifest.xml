@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.maangata.fillit_tionary">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/icon_fillit"
+        android:label="Fillit-tionary"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Activities.MainActivity"
+            android:label="Fillit-tionary" />
+        <activity
+            android:name=".Activities.CloserLook"
+            android:label="Fillit-tionary" />
+        <activity
+            android:name=".Activities.EditActivity"
+            android:label="@string/editactivity" />
+        <activity
+            android:name=".Activities.Help"
+            android:label="@string/ayuda" />
+        <activity
+            android:name=".Activities.PreMainActivity"
+            android:label="Fillit-tionary">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activities.EditActivityForLangue"
+            android:label="Fillit-tionary" />
+        <activity
+            android:name=".Activities.QuizzMeActivity"
+            android:label="@string/quizz" />
+        <activity
+            android:name=".Activities.ResultsActivity"
+            android:label="@string/resultados" />
+    </application>
+
+</manifest>
