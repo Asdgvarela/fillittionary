@@ -8,10 +8,10 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.maangata.fillit_tionary.Adapters.AdaptadorCursorPRE
-import com.maangata.fillit_tionary.Interfaces.MainContract.Langues.ViewCallback
-import com.maangata.fillit_tionary.Mvp.LanguesModelCallbackImplem
-import com.maangata.fillit_tionary.Mvp.LanguesPresenterCallbackImpl
+import com.maangata.fillit_tionary.Mvvm.LanguesViewModel
 import com.maangata.fillit_tionary.R
 import java.util.ArrayList
 import com.maangata.fillit_tionary.Utils.Constants.TOTHELIST
@@ -21,11 +21,10 @@ import com.maangata.fillit_tionary.Utils.Utils
 /**
  * Created by zosdam on 18/12/15.
  */
-class PreMainActivity : AppCompatActivity(), ViewCallback {
+class PreMainActivity : AppCompatActivity() {
 
     lateinit var listView: ListView
-
-    lateinit var mPresenter: LanguesPresenterCallbackImpl
+    lateinit var langueViewModel: LanguesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,21 +40,25 @@ class PreMainActivity : AppCompatActivity(), ViewCallback {
             startActivityForResult(intent, TOTHELIST)
         }
 
-        mPresenter = LanguesPresenterCallbackImpl(mView = this, mModel = LanguesModelCallbackImplem(this@PreMainActivity))
         iniciaLangues()
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun iniciaLangues() {
-        mPresenter.onRequestingLangues()
+        langueViewModel = ViewModelProviders.of(this).get(LanguesViewModel::class.java)
+        langueViewModel.getTheViewModel().observe(this, Observer<ArrayList<String>> {
+            if (it != null) {
+                (listView.adapter as AdaptadorCursorPRE).arl = it
+                (listView.adapter as AdaptadorCursorPRE).notifyDataSetChanged()
+            }
+        })
+
+        val mAdapter = AdaptadorCursorPRE(this@PreMainActivity, R.layout.elemento_pre_lista, R.id.textLang, langueViewModel.getTheViewModel().value!!)
+        listView.adapter = mAdapter
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    override fun setLanguesArray(mLangues: ArrayList<String>) {
-        listView.adapter = AdaptadorCursorPRE(this@PreMainActivity, R.layout.elemento_pre_lista, R.id.textLang, mLangues)
-    }
 
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

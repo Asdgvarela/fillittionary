@@ -10,10 +10,13 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.maangata.fillit_tionary.Interfaces.MainContract
 import com.maangata.fillit_tionary.Mvp.MotToEditModelImpl
 import com.maangata.fillit_tionary.Mvp.MotToEditPresenterImpl
 import com.maangata.fillit_tionary.Model.MotsList
+import com.maangata.fillit_tionary.Mvvm.MotToEditViewModel
 import com.maangata.fillit_tionary.R
 import com.maangata.fillit_tionary.Utils.Constants.ID
 import com.maangata.fillit_tionary.Utils.Constants.LANGUE
@@ -23,18 +26,7 @@ import com.maangata.fillit_tionary.Utils.Constants.NUEVO
  * Created by zosdam on 3/09/15.
  */
 
-class EditActivity : AppCompatActivity(), MainContract.MotToEdit.ViewCallBack {
-    override fun onFinishedDeleting() {
-        finish()
-    }
-
-    override fun onFinishedSaving() {
-        finish()
-    }
-
-    override fun setTheMot(mMotsList: MotsList) {
-        setTheMots(mMotsList)
-    }
+class EditActivity : AppCompatActivity() {
 
     lateinit var motEn1E: EditText
     lateinit var motEn2E: EditText
@@ -43,8 +35,8 @@ class EditActivity : AppCompatActivity(), MainContract.MotToEdit.ViewCallBack {
     private var id: Long = 0
     lateinit var spinnerLangue: Spinner
     lateinit var langue: String
-    lateinit var mPresenter: MotToEditPresenterImpl
     var newWord: Boolean = false
+    lateinit var mMotToEditViewModel: MotToEditViewModel
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,14 +47,18 @@ class EditActivity : AppCompatActivity(), MainContract.MotToEdit.ViewCallBack {
         langue = extras.getString(LANGUE)!!
         newWord = extras.getBoolean(NUEVO)
 
-        mPresenter = MotToEditPresenterImpl(this, MotToEditModelImpl(this@EditActivity))
-
         getTheMot(id, newWord)
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun getTheMot(id: Long, newWord: Boolean) {
-        mPresenter.OnRequestMotToEdit(id, newWord)
+        val mFactory = MotToEditViewModel.Factory(this, id, newWord)
+        mMotToEditViewModel = ViewModelProviders.of(this, mFactory).get(MotToEditViewModel::class.java)
+        mMotToEditViewModel.getMotToEditViewModel().observe(this, Observer {
+            if (it != null) {
+                setTheMots(it)
+            }
+        })
     }
 
     fun setTheMots(mMotsList: MotsList) {
@@ -106,14 +102,15 @@ class EditActivity : AppCompatActivity(), MainContract.MotToEdit.ViewCallBack {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        getTheMot(id, newWord)
+        mMotToEditViewModel.refreshData()
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onBackPressed() {
         if (intent.extras!!.getBoolean(NUEVO, false)) {
-            mPresenter.OnRequestDelete(id)
+            mMotToEditViewModel.deleteMot()
+            finish()
         }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,7 +133,8 @@ class EditActivity : AppCompatActivity(), MainContract.MotToEdit.ViewCallBack {
 
         if (idm == R.id.canceledit) {
             if (intent.extras!!.getBoolean(NUEVO, false)) {
-                mPresenter.OnRequestDelete(id)
+                mMotToEditViewModel.deleteMot()
+                finish()
             } else {
                 finish()
             }
@@ -148,7 +146,7 @@ class EditActivity : AppCompatActivity(), MainContract.MotToEdit.ViewCallBack {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun saveTheMot() {
-        mPresenter = MotToEditPresenterImpl(this, MotToEditModelImpl(this@EditActivity))
-        mPresenter.OnRequestSaveMot(id, newWord)
+        mMotToEditViewModel.saveTheMotToEdit()
+        finish()
     }
 }

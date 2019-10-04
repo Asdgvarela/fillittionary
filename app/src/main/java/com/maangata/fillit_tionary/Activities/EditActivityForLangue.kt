@@ -8,11 +8,13 @@ import android.view.View
 import android.widget.EditText
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.maangata.fillit_tionary.Interfaces.MainContract
 import com.maangata.fillit_tionary.Mvp.MotToEditForLangueModelImpl
-import com.maangata.fillit_tionary.Mvp.MotToEditModelImpl
 import com.maangata.fillit_tionary.Mvp.MotToEditPresenterImpl
 import com.maangata.fillit_tionary.Model.MotsList
+import com.maangata.fillit_tionary.Mvvm.MotToEditForLangueViewModel
 import com.maangata.fillit_tionary.R
 import com.maangata.fillit_tionary.Utils.Constants.ID
 import com.maangata.fillit_tionary.Utils.Constants.LANGUE
@@ -25,17 +27,7 @@ import com.maangata.fillit_tionary.Utils.Constants.NUEVO
 /**
  * Este método es como el EditActivity. Particularidades comentadas.
  */
-class EditActivityForLangue : AppCompatActivity(), MainContract.MotToEdit.ViewCallBack {
-    override fun setTheMot(mMotsList: MotsList) {
-    }
-
-    override fun onFinishedSaving() {
-        finish()
-    }
-
-    override fun onFinishedDeleting() {
-        finish()
-    }
+class EditActivityForLangue : AppCompatActivity(){
 
     lateinit var langue: String
     lateinit var motEn1E: EditText
@@ -45,7 +37,7 @@ class EditActivityForLangue : AppCompatActivity(), MainContract.MotToEdit.ViewCa
     lateinit var idioma: EditText
     var id: Long = 0
     var newWord = false
-    lateinit var mPresenter: MotToEditPresenterImpl
+    lateinit var mMotToEditForLangueViewModel: MotToEditForLangueViewModel
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,8 +48,9 @@ class EditActivityForLangue : AppCompatActivity(), MainContract.MotToEdit.ViewCa
 //        mot = DataManager.palabra(id, this)
         newWord = extras.getBoolean(NUEVO)
         langue = extras.getString(LANGUE, "")
-        mPresenter = MotToEditPresenterImpl(this, MotToEditForLangueModelImpl(this@EditActivityForLangue))
-        
+        val mFactoy = MotToEditForLangueViewModel.Factory(application, id, newWord)
+        mMotToEditForLangueViewModel = ViewModelProviders.of(this, mFactoy).get(MotToEditForLangueViewModel::class.java)
+
         setTheMot()
     }
 
@@ -82,7 +75,7 @@ class EditActivityForLangue : AppCompatActivity(), MainContract.MotToEdit.ViewCa
 
     override fun onBackPressed() {
         if (newWord) {
-            mPresenter.OnRequestDelete(id)
+            mMotToEditForLangueViewModel.deleteMot()
         } else {
             finish()
         }
@@ -102,13 +95,15 @@ class EditActivityForLangue : AppCompatActivity(), MainContract.MotToEdit.ViewCa
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
             R.id.acceptedit -> {
-                mPresenter.OnRequestSaveMot(id, newWord)
+                mMotToEditForLangueViewModel.saveTheMotToEdit()
+                finish()
                 return true
             }
 
             R.id.canceledit -> {
                 if (newWord) {
-                    mPresenter.OnRequestDelete(id)
+                    mMotToEditForLangueViewModel.deleteMot()
+                    finish()
                 } else {
                     finish()
                 }

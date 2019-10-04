@@ -1,9 +1,14 @@
 package com.maangata.fillit_tionary.Mvp
 
+import android.app.Application
 import android.content.Context
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.maangata.fillit_tionary.Data.DataManager
 import com.maangata.fillit_tionary.Interfaces.MainContract
 import com.maangata.fillit_tionary.Model.Mot
+import com.maangata.fillit_tionary.Mvvm.AllMotsViewModel
+import com.maangata.fillit_tionary.Mvvm.CloserLookViewModel
 import java.io.File
 
 class CloserLookModelImpl(val context: Context): MainContract.CloserLook.ModelCallback {

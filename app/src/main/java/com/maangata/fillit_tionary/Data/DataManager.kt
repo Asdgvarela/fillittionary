@@ -3,10 +3,17 @@ package com.maangata.fillit_tionary.Data
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import com.maangata.fillit_tionary.Activities.EditActivity
+import com.maangata.fillit_tionary.Activities.EditActivityForLangue
+import com.maangata.fillit_tionary.Interfaces.MainContract
 
 import com.maangata.fillit_tionary.Model.Mot
 import com.maangata.fillit_tionary.Model.MotsList
+import com.maangata.fillit_tionary.R
 import com.maangata.fillit_tionary.Sql.SqlitoDBHelper
+import java.io.File
 
 /**
  * Created by zosdam on 3/09/15.
@@ -45,6 +52,39 @@ object DataManager {
         db.close()
         return mot
     }
+
+    fun getPalabra(id: Long, context: Context): MutableLiveData<Mot> {
+        val mot = Mot()
+        val db = createDB(context).writableDatabase
+        val cursor = db.rawQuery("SELECT * FROM fillittionary WHERE _id = $id", null)
+        if (cursor.moveToNext()) {
+            mot.motEn1 = cursor.getString(1)
+            mot.motEn2 = cursor.getString(2)
+            mot.tipo = cursor.getString(3)
+            mot.nota = cursor.getString(4)
+            mot.idioma = cursor.getString(6)
+            mot.foto = cursor.getString(7)
+            mot.sonido = cursor.getString(8)
+        }
+        cursor.close()
+        db.close()
+
+        val mValueToReturn = MutableLiveData<Mot>()
+        mValueToReturn.value = mot
+        return mValueToReturn
+    }
+
+    fun updateSound(mSound: Mot, id: Long, context: Context) {
+        if (mSound.sonido.equals("")) {
+            val sd = File(mSound.sonido)
+            sd.delete()
+        }
+
+        updateParoles(id, mSound, context)
+
+    }
+
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -206,6 +246,221 @@ object DataManager {
         }
 
         return motsList
+    }
+
+    fun getTheLangues(context: Context): MutableLiveData<ArrayList<String>> {
+        val motList = ArrayList<String>()
+
+        val cursor = wantLangue(context)
+
+        while (cursor.moveToNext()) {
+            if (!cursor.isNull(1)) {
+
+                if (cursor.getString(1) == "") {
+                    Toast.makeText(context, R.string.avisoDeCorrupcion, Toast.LENGTH_SHORT).show()
+                    delete(cursor.getLong(0), context)
+
+                } else if (cursor.getString(1) == "-") {
+                    if (!motList.contains<Any>(context.getString(R.string.sinIdioma).toUpperCase())) {
+                        motList.add(cursor.getString(R.string.sinIdioma).toUpperCase())
+                    }
+
+                } else {
+                    if (!motList.contains<Any>(cursor.getString(1).toUpperCase())) {
+                        motList.add(cursor.getString(1).toUpperCase())
+                    }
+                }
+            }
+        }
+        cursor.close()
+
+        val toReturn = MutableLiveData<ArrayList<String>>()
+        toReturn.value = motList
+        return toReturn
+    }
+
+    fun getTheMotsList(mLangue: String, context: Context): MutableLiveData<Cursor> {
+        val mObjectReturn = MutableLiveData<Cursor>()
+        mObjectReturn.value = DataManager.createDB(context).readableDatabase.rawQuery("SELECT * FROM fillittionary WHERE idioma = '$mLangue' COLLATE NOCASE", null)
+
+        return mObjectReturn
+    }
+
+    fun getTheMotToEdit(context: Context, id: Long, newMot: Boolean): MutableLiveData<MotsList> {
+        val mMotsList = MotsList()
+
+        mMotsList.singleMot = palabra(id, context)
+        mMotsList.langues = getTheLanguesToEdit(context, newMot)
+
+        val mValueToReturn = MutableLiveData<MotsList>()
+        mValueToReturn.value = mMotsList
+        return mValueToReturn
+    }
+
+    fun getTheLanguesToEdit(context: Context, newMot: Boolean): ArrayList<String> {
+        val cursor = wantLangue(context)
+        val containsLangues = ArrayList<String>()
+
+        while (cursor.moveToNext()) {
+            if (!cursor.isNull(1)) {
+
+                if (cursor.getString(1) == "") {
+                    Toast.makeText(context, R.string.avisoDeCorrupcion, Toast.LENGTH_SHORT).show()
+                    if (!newMot)
+                        DataManager.delete(cursor.getLong(0), context)
+
+                } else if (cursor.getString(1) == "-") {
+                    if (!containsLangues.contains<Any>(context.getString(R.string.sinIdioma).toUpperCase())) {
+                        containsLangues.add(cursor.getString(R.string.sinIdioma).toUpperCase())
+                    }
+
+                } else {
+                    if (!containsLangues.contains<Any>(cursor.getString(1).toUpperCase())) {
+                        containsLangues.add(cursor.getString(1).toUpperCase())
+                    }
+                }
+            }
+        }
+
+        return containsLangues
+    }
+
+    fun saveTheMotToEdit(id: Long, newMot: Boolean, context: Context) {
+        buildAndSaveTheMot(id, newMot, context)
+    }
+
+    fun buildAndSaveTheMot(id: Long, newMot: Boolean, context: Context) {
+        val mActivity = context as EditActivity
+
+        val mot = Mot()
+        if (mActivity.motEn1E.text.toString() != "") {
+            val temp =
+                mActivity.motEn1E.text.toString().substring(0, 1).toUpperCase() + mActivity.motEn1E.text.toString().substring(1)
+            mot.motEn1 = temp
+        } else {
+            mot.motEn1 = "-"
+        }
+
+        if (mActivity.motEn2E.text.toString() != "") {
+            val temp =
+                mActivity.motEn2E.text.toString().substring(0, 1).toUpperCase() + mActivity.motEn2E.text.toString().substring(1)
+            mot.motEn2 = temp
+        } else {
+            mot.motEn2 = "-"
+        }
+
+        if (mActivity.tipoE.text.toString() != "") {
+            val temp = mActivity.tipoE.text.toString().substring(0, 1).toUpperCase() + mActivity.tipoE.text.toString().substring(1)
+            mot.tipo = temp
+        } else {
+            mot.tipo = "-"
+        }
+
+        if (mActivity.notaE.text.toString() != "") {
+            val temp = mActivity.notaE.text.toString().substring(0, 1).toUpperCase() + mActivity.notaE.text.toString().substring(1)
+            mot.nota = temp
+        } else {
+            mot.nota = "-"
+        }
+
+        val arl = getTheLanguesToEdit(context, newMot)
+        if (arl[mActivity.spinnerLangue.selectedItemPosition] == "") {
+            mot.idioma = context.getString(R.string.sinIdioma).toUpperCase()
+        } else {
+            mot.idioma = arl[mActivity.spinnerLangue.selectedItemPosition].toUpperCase()
+        }
+
+        updateParoles(id, mot, context)
+    }
+
+    fun getTheMotToEditForLangue(id: Long, newMot: Boolean, context: Context): MutableLiveData<MotsList> {
+        val mMotsList = MotsList()
+
+        mMotsList.singleMot = palabra(id, context)
+        mMotsList.langues = getTheLanguesToEditForLangue(newMot, context)
+
+        val mValueToReturn = MutableLiveData<MotsList>()
+        mValueToReturn.value = mMotsList
+        return mValueToReturn
+    }
+
+    fun getTheLanguesToEditForLangue(newMot: Boolean, context: Context): ArrayList<String> {
+        val cursor = wantLangue(context)
+        val containsLangues = ArrayList<String>()
+
+        while (cursor.moveToNext()) {
+            if (!cursor.isNull(1)) {
+
+                if (cursor.getString(1) == "") {
+                    Toast.makeText(context, R.string.avisoDeCorrupcion, Toast.LENGTH_SHORT).show()
+                    if (!newMot)
+                        delete(cursor.getLong(0), context)
+
+                } else if (cursor.getString(1) == "-") {
+                    if (!containsLangues.contains<Any>(context.getString(R.string.sinIdioma).toUpperCase())) {
+                        containsLangues.add(cursor.getString(R.string.sinIdioma).toUpperCase())
+                    }
+
+                } else {
+                    if (!containsLangues.contains<Any>(cursor.getString(1).toUpperCase())) {
+                        containsLangues.add(cursor.getString(1).toUpperCase())
+                    }
+                }
+            }
+        }
+
+        return containsLangues
+    }
+
+    fun buildAndSaveTheMotForLangue(id: Long, context: Context) {
+        val mActivity = context as EditActivityForLangue
+
+        val mot = Mot()
+        if (mActivity.motEn1E.text.toString() != "") {
+            val temp =
+                mActivity.motEn1E.text.toString().substring(0, 1).toUpperCase() + mActivity.motEn1E.text.toString().substring(1)
+            mot.motEn1 = temp
+        } else {
+            mot.motEn1 = "-"
+        }
+
+        if (mActivity.motEn2E.text.toString() != "") {
+            val temp =
+                mActivity.motEn2E.text.toString().substring(0, 1).toUpperCase() + mActivity.motEn2E.text.toString().substring(1)
+            mot.motEn2 = temp
+        } else {
+            mot.motEn2 = "-"
+        }
+
+        if (mActivity.tipoE.text.toString() != "") {
+            val temp = mActivity.tipoE.text.toString().substring(0, 1).toUpperCase() + mActivity.tipoE.text.toString().substring(1)
+            mot.tipo = temp
+        } else {
+            mot.tipo = "-"
+        }
+
+        if (mActivity.notaE.text.toString() != "") {
+            val temp = mActivity.notaE.text.toString().substring(0, 1).toUpperCase() + mActivity.notaE.text.toString().substring(1)
+            mot.nota = temp
+        } else {
+            mot.nota = "-"
+        }
+
+        if (mActivity.idioma.text.toString() != "") {
+            mot.idioma = mActivity.idioma.text.toString()
+        } else {
+            mot.idioma = mActivity.getString(R.string.sinIdioma)
+        }
+
+        updateParoles(id, mot, context)
+    }
+
+    fun saveTheMotForLangue(id: Long, context: Context) {
+        buildAndSaveTheMotForLangue(id, context)
+    }
+
+    fun deleteMotForLangue(id: Long, context: Context) {
+        delete(id, context)
     }
 }
 

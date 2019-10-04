@@ -8,24 +8,27 @@ import android.view.MenuItem
 import android.widget.AdapterView
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.maangata.fillit_tionary.Adapters.AdaptadorCursor
 import com.maangata.fillit_tionary.Mvp.AllMotsModelCallbackImpl
 import com.maangata.fillit_tionary.Mvp.AllMotsPresenterImpl
 import com.maangata.fillit_tionary.Interfaces.MainContract
+import com.maangata.fillit_tionary.Mvvm.AllMotsViewModel
 import com.maangata.fillit_tionary.R
 import com.maangata.fillit_tionary.Utils.Constants.RESULT_EDIT_MAIN
 import com.maangata.fillit_tionary.Utils.Constants.ID
 import com.maangata.fillit_tionary.Utils.Constants.LANGUE
 import com.maangata.fillit_tionary.Utils.Constants.STRING
 import com.maangata.fillit_tionary.Utils.Utils
-import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), MainContract.AllMots.ViewCallback {
+class MainActivity : AppCompatActivity() {
 
     internal lateinit var listView: ListView
     internal lateinit var langue: String
-    lateinit var mPresenter: AllMotsPresenterImpl
     var numOfWords: Int = 0
+    lateinit var allMotsViewModel: AllMotsViewModel
+    lateinit var adapter: AdaptadorCursor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +39,6 @@ class MainActivity : AppCompatActivity(), MainContract.AllMots.ViewCallback {
 
         title = langue
 
-        mPresenter = AllMotsPresenterImpl(this,  mModel = AllMotsModelCallbackImpl(this@MainActivity))
-
         listView = findViewById(R.id.listview)
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id -> goToCloserLook(id) }
 
@@ -47,15 +48,23 @@ class MainActivity : AppCompatActivity(), MainContract.AllMots.ViewCallback {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun getAllTheWords() {
-        mPresenter.onRequestingAllMots(langue)
+        val mFactory: AllMotsViewModel.Factory = AllMotsViewModel.Factory(application, langue)
+        allMotsViewModel = ViewModelProviders.of(this, mFactory).get(AllMotsViewModel::class.java)
+        allMotsViewModel.getAllMotsViewModel().observe(this, Observer {
+            if (it != null) {
+                // TODO: esto es una cutrada. Se puede mejorar, seguramente cambiando el Adaptador a BaseAdapter.
+                adapter = AdaptadorCursor(this, it)
+                listView.adapter = adapter
+                setTheMotList(it)
+            }
+        })
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    override fun setTheMotList(mCursor: Cursor) {
+    fun setTheMotList(mCursor: Cursor) {
         numOfWords = mCursor.count
-        val adapter = AdaptadorCursor(this, mCursor)
-        listView.adapter = adapter
+
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

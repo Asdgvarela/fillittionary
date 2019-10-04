@@ -8,7 +8,7 @@ import java.util.ArrayList
 /**
  * Created by zosdam on 23/12/15.
  */
-class AdaptadorCursorPRE(contexto: Context, resource: Int, textViewResourceId: Int, arl: ArrayList<String>) :
+class AdaptadorCursorPRE(contexto: Context, resource: Int, textViewResourceId: Int, var arl: ArrayList<String>) :
     ArrayAdapter<String>(contexto, resource, textViewResourceId, arl)
 
 

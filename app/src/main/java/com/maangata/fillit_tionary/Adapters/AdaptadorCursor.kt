@@ -12,14 +12,7 @@ import com.maangata.fillit_tionary.R
 /**
  * Created by zosdam on 1/09/15.
  */
-class AdaptadorCursor
-/**
- * Simplemente inicia el adaptador.
- * @param contexto
- * @param c
- */
-    (
-    contexto: Context, c: Cursor) : CursorAdapter(contexto, c, false) {
+class AdaptadorCursor(contexto: Context, c: Cursor) : CursorAdapter(contexto, c, false) {
 
     private lateinit var motEn1: TextView
     private lateinit var motEn2: TextView

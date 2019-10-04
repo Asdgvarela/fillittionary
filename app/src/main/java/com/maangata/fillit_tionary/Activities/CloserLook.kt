@@ -15,12 +15,13 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.maangata.fillit_tionary.Data.DataManager
 import com.maangata.fillit_tionary.Interfaces.MainContract
 import com.maangata.fillit_tionary.Model.Mot
-import com.maangata.fillit_tionary.Mvp.CloserLookModelImpl
-import com.maangata.fillit_tionary.Mvp.CloserLookPresenterImpl
+import com.maangata.fillit_tionary.Mvvm.CloserLookViewModel
 import com.maangata.fillit_tionary.R
 import com.maangata.fillit_tionary.Utils.Constants.ID
 import com.maangata.fillit_tionary.Utils.Constants.LANGUE
@@ -32,7 +33,7 @@ import com.maangata.fillit_tionary.Utils.Constants.RESULT_EDIT
 /**
  * Created by zosdam on 3/09/15.
  */
-class CloserLook : AppCompatActivity(), MainContract.CloserLook.ViewCallback {
+class CloserLook : AppCompatActivity() {
 
     lateinit var motEn1: TextView
     lateinit var motEn2: TextView
@@ -49,13 +50,8 @@ class CloserLook : AppCompatActivity(), MainContract.CloserLook.ViewCallback {
     lateinit var record: MediaRecorder
     lateinit var toPlay: MediaPlayer
     private var isRecording: Boolean = false
-    lateinit var mPresenter: CloserLookPresenterImpl
     var mMot: Mot = Mot()
-
-    override fun setTheMot(mMot: Mot) {
-        this.mMot = mMot
-        setTheViews(mMot)
-    }
+    lateinit var mCloserLookViewModel: CloserLookViewModel
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +60,6 @@ class CloserLook : AppCompatActivity(), MainContract.CloserLook.ViewCallback {
         val bundle = intent.extras
         id = bundle!!.getLong(ID)
         langue = bundle.getString(LANGUE, "")
-
-        mPresenter = CloserLookPresenterImpl(this, CloserLookModelImpl(this))
 
         motEn1 = findViewById<View>(R.id.moten1closer) as TextView
         motEn2 = findViewById<View>(R.id.moten2closer) as TextView
@@ -84,7 +78,18 @@ class CloserLook : AppCompatActivity(), MainContract.CloserLook.ViewCallback {
             botonStop.isEnabled = false
             botonGrabar.isEnabled = true
         }
-        updateVistas(null)
+
+        updateVistas()
+    }
+
+    fun updateVistas() {
+        val mFactory = CloserLookViewModel.Factory(application, id)
+        mCloserLookViewModel = ViewModelProviders.of(this, mFactory).get(CloserLookViewModel::class.java)
+        mCloserLookViewModel.getCloserViewViewModel().observe(this, Observer {
+            if (it != null) {
+                setTheViews(it)
+            }
+        })
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,15 +129,10 @@ class CloserLook : AppCompatActivity(), MainContract.CloserLook.ViewCallback {
             quitarSonido()
             botonQuitarSonido.hide()
         }
-        botonStop.setOnClickListener { stopRecording(soundPath) }
+        botonStop.setOnClickListener { stopRecording() }
         botonStop.hide()
         isRecording = false
     }
-
-    fun updateVistas(mot: Mot?) {
-        mPresenter.OnRequestMot(mot, id)
-    }
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun clickEdit() {
@@ -145,7 +145,7 @@ class CloserLook : AppCompatActivity(), MainContract.CloserLook.ViewCallback {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RESULT_EDIT) {
-            updateVistas(mMot)
+            mCloserLookViewModel.refreshViewModel()
         }
     }
 
@@ -156,7 +156,7 @@ class CloserLook : AppCompatActivity(), MainContract.CloserLook.ViewCallback {
 
         Toast.makeText(this@CloserLook, R.string.sonidoEliminado, Toast.LENGTH_SHORT).show()
 
-        mPresenter.OnUpdateSound(mMot, id)
+        DataManager.updateSound(mMot, id, this)
     }
 
     fun playSound(mSound: String) {
@@ -205,7 +205,7 @@ class CloserLook : AppCompatActivity(), MainContract.CloserLook.ViewCallback {
         }
     }
 
-    fun stopRecording(recordedWord: String) {
+    fun stopRecording() {
         botonStop.setEnabled(false)
 
         if (isRecording) {
@@ -223,7 +223,7 @@ class CloserLook : AppCompatActivity(), MainContract.CloserLook.ViewCallback {
 
             Toast.makeText(this@CloserLook, R.string.grabacion_parada, Toast.LENGTH_SHORT).show()
 
-            mPresenter.OnUpdateSound(mMot, id)
+            DataManager.updateSound(mMot, id, this)
 
         } else {
             toPlay.release()
@@ -239,7 +239,6 @@ class CloserLook : AppCompatActivity(), MainContract.CloserLook.ViewCallback {
     }
 
     fun recordAudio() {
-
         val forSound = File(soundPath)
         if (!forSound.exists()) {
             forSound.mkdirs()
