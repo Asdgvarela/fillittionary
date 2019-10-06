@@ -10,7 +10,7 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.maangata.fillit_tionary.Adapters.AdaptadorCursorPRE
+import com.maangata.fillit_tionary.Adapters.AdaptadorPremain
 import com.maangata.fillit_tionary.Mvvm.LanguesViewModel
 import com.maangata.fillit_tionary.R
 import java.util.ArrayList
@@ -25,6 +25,7 @@ class PreMainActivity : AppCompatActivity() {
 
     lateinit var listView: ListView
     lateinit var langueViewModel: LanguesViewModel
+    lateinit var mAdapter: AdaptadorPremain
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,12 +50,12 @@ class PreMainActivity : AppCompatActivity() {
         langueViewModel = ViewModelProviders.of(this).get(LanguesViewModel::class.java)
         langueViewModel.getTheViewModel().observe(this, Observer<ArrayList<String>> {
             if (it != null) {
-                (listView.adapter as AdaptadorCursorPRE).arl = it
-                (listView.adapter as AdaptadorCursorPRE).notifyDataSetChanged()
+                mAdapter.arl = it
+                mAdapter.notifyDataSetChanged()
             }
         })
 
-        val mAdapter = AdaptadorCursorPRE(this@PreMainActivity, R.layout.elemento_pre_lista, R.id.textLang, langueViewModel.getTheViewModel().value!!)
+        mAdapter = AdaptadorPremain(this@PreMainActivity, langueViewModel.getTheViewModel().value!!)
         listView.adapter = mAdapter
     }
 
@@ -63,7 +64,7 @@ class PreMainActivity : AppCompatActivity() {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        iniciaLangues()
+        langueViewModel.refreshLangues()
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

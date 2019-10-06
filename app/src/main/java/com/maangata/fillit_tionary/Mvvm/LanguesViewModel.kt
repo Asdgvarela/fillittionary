@@ -19,4 +19,8 @@ class LanguesViewModel(var app: Application): AndroidViewModel(app) {
     fun getTheViewModel(): LiveData<ArrayList<String>> {
         return mLanguesViewModel
     }
+
+    fun refreshLangues() {
+        mLanguesViewModel.value = DataManager.getTheLangues(app.applicationContext).value
+    }
 }

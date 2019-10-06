@@ -110,8 +110,8 @@ class EditActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (intent.extras!!.getBoolean(NUEVO, false)) {
             mMotToEditViewModel.deleteMot()
-            finish()
         }
+        finish()
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

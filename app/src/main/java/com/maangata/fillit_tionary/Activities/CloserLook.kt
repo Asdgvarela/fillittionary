@@ -298,7 +298,7 @@ class CloserLook : AppCompatActivity() {
                 return true
             }
             R.id.delete_button -> {
-                DataManager.delete(id, this@CloserLook)
+                mCloserLookViewModel.deleteMot()
                 finish()
                 return true
             }

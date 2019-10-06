@@ -12,6 +12,7 @@ class Mot {
     lateinit var idioma: String
     lateinit var foto: String
     lateinit var sonido: String
+    var id: Long
 
     constructor() {
         this.motEn1 = ""
@@ -21,14 +22,16 @@ class Mot {
         this.idioma = ""
         this.foto = ""
         this.sonido = ""
+        this.id = 0
     }
 
-    constructor(motEn1: String, motEn2: String, tipo: String, nota: String, idioma: String) {
+    constructor(motEn1: String, motEn2: String, tipo: String, nota: String) {
 
         this.motEn1 = motEn1
         this.motEn2 = motEn2
         this.tipo = tipo
         this.nota = nota
+        this.id = 0
     }
 
     /**

@@ -48,7 +48,7 @@ class EditActivityForLangue : AppCompatActivity(){
 //        mot = DataManager.palabra(id, this)
         newWord = extras.getBoolean(NUEVO)
         langue = extras.getString(LANGUE, "")
-        val mFactoy = MotToEditForLangueViewModel.Factory(application, id, newWord)
+        val mFactoy = MotToEditForLangueViewModel.Factory(this, id, newWord)
         mMotToEditForLangueViewModel = ViewModelProviders.of(this, mFactoy).get(MotToEditForLangueViewModel::class.java)
 
         setTheMot()
@@ -76,9 +76,9 @@ class EditActivityForLangue : AppCompatActivity(){
     override fun onBackPressed() {
         if (newWord) {
             mMotToEditForLangueViewModel.deleteMot()
-        } else {
-            finish()
+
         }
+        finish()
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

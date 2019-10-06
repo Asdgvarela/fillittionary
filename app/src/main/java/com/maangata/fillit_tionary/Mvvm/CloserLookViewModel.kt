@@ -21,6 +21,11 @@ class CloserLookViewModel(var app: Application, var id: Long): AndroidViewModel(
         mCloserLookViewModel.value = DataManager.getPalabra(id, app.applicationContext).value
     }
 
+    fun deleteMot() {
+        DataManager.delete(id, app.applicationContext)
+        refreshViewModel()
+    }
+
     /**
      * A creator is used to inject the project ID into the ViewModel
      */

@@ -1,7 +1,6 @@
 package com.maangata.fillit_tionary.Activities
 
 import android.content.Intent
-import android.database.Cursor
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,10 +9,8 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.maangata.fillit_tionary.Adapters.AdaptadorCursor
-import com.maangata.fillit_tionary.Mvp.AllMotsModelCallbackImpl
-import com.maangata.fillit_tionary.Mvp.AllMotsPresenterImpl
-import com.maangata.fillit_tionary.Interfaces.MainContract
+import com.maangata.fillit_tionary.Adapters.AdaptadorMain
+import com.maangata.fillit_tionary.Model.Mot
 import com.maangata.fillit_tionary.Mvvm.AllMotsViewModel
 import com.maangata.fillit_tionary.R
 import com.maangata.fillit_tionary.Utils.Constants.RESULT_EDIT_MAIN
@@ -28,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     internal lateinit var langue: String
     var numOfWords: Int = 0
     lateinit var allMotsViewModel: AllMotsViewModel
-    lateinit var adapter: AdaptadorCursor
+    lateinit var mAdapter: AdaptadorMain
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,19 +49,20 @@ class MainActivity : AppCompatActivity() {
         allMotsViewModel = ViewModelProviders.of(this, mFactory).get(AllMotsViewModel::class.java)
         allMotsViewModel.getAllMotsViewModel().observe(this, Observer {
             if (it != null) {
-                // TODO: esto es una cutrada. Se puede mejorar, seguramente cambiando el Adaptador a BaseAdapter.
-                adapter = AdaptadorCursor(this, it)
-                listView.adapter = adapter
+                mAdapter.mList = it
+                mAdapter.notifyDataSetChanged()
                 setTheMotList(it)
             }
         })
+
+        mAdapter = AdaptadorMain(this, allMotsViewModel.getAllMotsViewModel().value!!)
+        listView.adapter = mAdapter
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun setTheMotList(mCursor: Cursor) {
-        numOfWords = mCursor.count
-
+    fun setTheMotList(mCursor: ArrayList<Mot>) {
+        numOfWords = mCursor.size
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +91,10 @@ class MainActivity : AppCompatActivity() {
     // esta actividad tiene que recibir información de CloserLook y no se refresca.
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        getAllTheWords()
+        allMotsViewModel.refreshViewModel()
+        if (allMotsViewModel.getAllMotsViewModel().value!!.isEmpty()) {
+            finish()
+        }
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

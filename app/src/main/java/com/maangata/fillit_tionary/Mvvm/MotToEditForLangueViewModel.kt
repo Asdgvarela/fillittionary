@@ -1,5 +1,6 @@
 package com.maangata.fillit_tionary.Mvvm
 
+import android.app.Activity
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -8,12 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.maangata.fillit_tionary.Data.DataManager
 import com.maangata.fillit_tionary.Model.MotsList
 
-class MotToEditForLangueViewModel(var app: Application, var id: Long, var newMot: Boolean): AndroidViewModel(app) {
+class MotToEditForLangueViewModel(var app: Activity, var id: Long, var newMot: Boolean): ViewModel() {
 
     var mMotToEditViewModel: MutableLiveData<MotsList>
 
     init {
-        mMotToEditViewModel = DataManager.getTheMotToEditForLangue(id, newMot, app.applicationContext)
+        mMotToEditViewModel = MutableLiveData<MotsList>()
     }
 
     fun getMotToEditForLangueViewModel(): MutableLiveData<MotsList> {
@@ -21,25 +22,25 @@ class MotToEditForLangueViewModel(var app: Application, var id: Long, var newMot
     }
 
     fun saveTheMotToEdit() {
-        DataManager.saveTheMotForLangue(id, app.applicationContext)
+        DataManager.saveTheMotForLangue(id, app)
     }
 
     fun deleteMot() {
-        DataManager.deleteMotForLangue(id, app.applicationContext)
+        DataManager.deleteMotForLangue(id, app)
     }
 
     fun refreshData() {
-        mMotToEditViewModel.value = DataManager.getTheMotToEdit(app.applicationContext, id, newMot).value
+        mMotToEditViewModel.value = DataManager.getTheMotToEdit(app, id, newMot).value
     }
     /**
      * A creator is used to inject the project ID into the ViewModel
      */
-    class Factory(private val application: Application, private val id: Long, private val newMot: Boolean) :
+    class Factory(private val activity: Activity, private val id: Long, private val newMot: Boolean) :
         ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-            return MotToEditForLangueViewModel(application, id, newMot) as T
+            return MotToEditForLangueViewModel(activity, id, newMot) as T
         }
     }
 }

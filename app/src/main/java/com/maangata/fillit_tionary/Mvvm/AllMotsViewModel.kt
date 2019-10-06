@@ -9,21 +9,24 @@ import com.maangata.fillit_tionary.Data.DataManager
 import androidx.lifecycle.ViewModel
 import androidx.annotation.NonNull
 import androidx.lifecycle.ViewModelProvider
+import com.maangata.fillit_tionary.Model.Mot
 
 
+class AllMotsViewModel(var app: Application, var mLangue: String): AndroidViewModel(app) {
 
-class AllMotsViewModel(var app: Application, mLangue: String): AndroidViewModel(app) {
-
-    var allMotsViewModel: MutableLiveData<Cursor> = MutableLiveData()
+    var allMotsViewModel: MutableLiveData<ArrayList<Mot>>
 
     init {
         allMotsViewModel = DataManager.getTheMotsList(mLangue, app.applicationContext)
     }
 
-    fun getAllMotsViewModel(): LiveData<Cursor> {
-        return  allMotsViewModel
+    fun getAllMotsViewModel(): LiveData<ArrayList<Mot>> {
+        return allMotsViewModel
     }
 
+    fun refreshViewModel() {
+        allMotsViewModel.value = DataManager.getTheMotsList(mLangue, app.applicationContext).value
+    }
     /**
      * A creator is used to inject the project ID into the ViewModel
      */

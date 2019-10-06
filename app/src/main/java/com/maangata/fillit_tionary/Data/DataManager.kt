@@ -1,5 +1,6 @@
 package com.maangata.fillit_tionary.Data
 
+import android.app.Activity
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -47,6 +48,7 @@ object DataManager {
             mot.idioma = cursor.getString(6)
             mot.foto = cursor.getString(7)
             mot.sonido = cursor.getString(8)
+            mot.id = id
         }
         cursor.close()
         db.close()
@@ -57,7 +59,7 @@ object DataManager {
         val mot = Mot()
         val db = createDB(context).writableDatabase
         val cursor = db.rawQuery("SELECT * FROM fillittionary WHERE _id = $id", null)
-        if (cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             mot.motEn1 = cursor.getString(1)
             mot.motEn2 = cursor.getString(2)
             mot.tipo = cursor.getString(3)
@@ -65,12 +67,13 @@ object DataManager {
             mot.idioma = cursor.getString(6)
             mot.foto = cursor.getString(7)
             mot.sonido = cursor.getString(8)
+            mot.id = id
         }
-        cursor.close()
         db.close()
 
         val mValueToReturn = MutableLiveData<Mot>()
         mValueToReturn.value = mot
+        cursor.close()
         return mValueToReturn
     }
 
@@ -242,6 +245,7 @@ object DataManager {
             mot.idioma = cursor.getString(6)
             mot.foto = cursor.getString(7)
             mot.sonido = cursor.getString(8)
+            mot.id = cursor.getLong(0)
             motsList.motsList.add(mot)
         }
 
@@ -279,10 +283,24 @@ object DataManager {
         return toReturn
     }
 
-    fun getTheMotsList(mLangue: String, context: Context): MutableLiveData<Cursor> {
-        val mObjectReturn = MutableLiveData<Cursor>()
-        mObjectReturn.value = DataManager.createDB(context).readableDatabase.rawQuery("SELECT * FROM fillittionary WHERE idioma = '$mLangue' COLLATE NOCASE", null)
+    fun getTheMotsList(mLangue: String, context: Context): MutableLiveData<ArrayList<Mot>> {
+        val mObjectReturn = MutableLiveData<ArrayList<Mot>>()
+        val cursor = DataManager.createDB(context).readableDatabase.rawQuery("SELECT * FROM fillittionary WHERE idioma = '$mLangue' COLLATE NOCASE", null)
 
+        val mList = ArrayList<Mot>()
+        while (cursor.moveToNext()) {
+            val mMot = Mot()
+            mMot.motEn1 = cursor.getString(1)
+            mMot.motEn2 = cursor.getString(2)
+            mMot.tipo = cursor.getString(3)
+            mMot.id = cursor.getLong(0)
+
+            mList.add(mMot)
+        }
+
+        mObjectReturn.value = mList
+
+        cursor.close()
         return mObjectReturn
     }
 
@@ -370,6 +388,8 @@ object DataManager {
             mot.idioma = arl[mActivity.spinnerLangue.selectedItemPosition].toUpperCase()
         }
 
+        mot.id = id
+
         updateParoles(id, mot, context)
     }
 
@@ -412,7 +432,7 @@ object DataManager {
         return containsLangues
     }
 
-    fun buildAndSaveTheMotForLangue(id: Long, context: Context) {
+    fun buildAndSaveTheMotForLangue(id: Long, context: Activity) {
         val mActivity = context as EditActivityForLangue
 
         val mot = Mot()
@@ -452,10 +472,12 @@ object DataManager {
             mot.idioma = mActivity.getString(R.string.sinIdioma)
         }
 
+        mot.id = id
+
         updateParoles(id, mot, context)
     }
 
-    fun saveTheMotForLangue(id: Long, context: Context) {
+    fun saveTheMotForLangue(id: Long, context: Activity) {
         buildAndSaveTheMotForLangue(id, context)
     }
 
