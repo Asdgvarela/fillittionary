@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.editing.*
 
 class MotToEditModelImpl(var context: Context): MainContract.MotToEdit.ModelCallback {
     override fun deleteMot(listener: MainContract.MotToEdit.ModelCallback.OnFinishedDeletingMot, id: Long) {
-        DataManager.delete(id, context)
+//        DataManager.delete(id, context)
         listener.onFinishedDeletingMot()
     }
 
@@ -29,36 +29,36 @@ class MotToEditModelImpl(var context: Context): MainContract.MotToEdit.ModelCall
     override fun getTheMot(listener: MainContract.MotToEdit.ModelCallback.OnFinishedLoadingMotToEdit, id: Long, newMot: Boolean) {
         val mMotsList = MotsList()
 
-        mMotsList.singleMot = DataManager.palabra(id, context)
+//        mMotsList.singleMot = DataManager.palabra(id, context)
         mMotsList.langues = getTheLangues(newMot)
 
         listener.onFinishedMot(mMotsList)
     }
 
     fun getTheLangues(newMot: Boolean): ArrayList<String> {
-        val cursor = DataManager.wantLangue(context)
+//        val cursor = DataManager.wantLangue(context)
         val containsLangues = ArrayList<String>()
 
-        while (cursor.moveToNext()) {
-            if (!cursor.isNull(1)) {
-
-                if (cursor.getString(1) == "") {
-                    Toast.makeText(context, R.string.avisoDeCorrupcion, Toast.LENGTH_SHORT).show()
-                    if (!newMot)
-                        DataManager.delete(cursor.getLong(0), context)
-
-                } else if (cursor.getString(1) == "-") {
-                    if (!containsLangues.contains<Any>(context.getString(R.string.sinIdioma).toUpperCase())) {
-                        containsLangues.add(cursor.getString(R.string.sinIdioma).toUpperCase())
-                    }
-
-                } else {
-                    if (!containsLangues.contains<Any>(cursor.getString(1).toUpperCase())) {
-                        containsLangues.add(cursor.getString(1).toUpperCase())
-                    }
-                }
-            }
-        }
+//        while (cursor.moveToNext()) {
+//            if (!cursor.isNull(1)) {
+//
+//                if (cursor.getString(1) == "") {
+//                    Toast.makeText(context, R.string.avisoDeCorrupcion, Toast.LENGTH_SHORT).show()
+//                    if (!newMot)
+//                        DataManager.delete(cursor.getLong(0), context)
+//
+//                } else if (cursor.getString(1) == "-") {
+//                    if (!containsLangues.contains<Any>(context.getString(R.string.sinIdioma).toUpperCase())) {
+//                        containsLangues.add(cursor.getString(R.string.sinIdioma).toUpperCase())
+//                    }
+//
+//                } else {
+//                    if (!containsLangues.contains<Any>(cursor.getString(1).toUpperCase())) {
+//                        containsLangues.add(cursor.getString(1).toUpperCase())
+//                    }
+//                }
+//            }
+//        }
 
         return containsLangues
     }
@@ -104,6 +104,6 @@ class MotToEditModelImpl(var context: Context): MainContract.MotToEdit.ModelCall
             mot.idioma = arl[mActivity.spinnerLangue.selectedItemPosition].toUpperCase()
         }
 
-        DataManager.updateParoles(id, mot, context)
+//        DataManager.updateParoles(mot, context)
     }
 }

@@ -8,15 +8,9 @@ import android.view.View
 import android.widget.EditText
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.maangata.fillit_tionary.Interfaces.MainContract
-import com.maangata.fillit_tionary.Mvp.MotToEditForLangueModelImpl
-import com.maangata.fillit_tionary.Mvp.MotToEditPresenterImpl
-import com.maangata.fillit_tionary.Model.MotsList
 import com.maangata.fillit_tionary.Mvvm.MotToEditForLangueViewModel
 import com.maangata.fillit_tionary.R
-import com.maangata.fillit_tionary.Utils.Constants.ID
 import com.maangata.fillit_tionary.Utils.Constants.LANGUE
 import com.maangata.fillit_tionary.Utils.Constants.NUEVO
 
@@ -44,50 +38,40 @@ class EditActivityForLangue : AppCompatActivity(){
         setContentView(R.layout.editing_langue)
 
         val extras = intent.extras!!
-        id = extras.getLong(ID, -1)
-//        mot = DataManager.palabra(id, this)
         newWord = extras.getBoolean(NUEVO)
         langue = extras.getString(LANGUE, "")
-        val mFactoy = MotToEditForLangueViewModel.Factory(this, id, newWord)
-        mMotToEditForLangueViewModel = ViewModelProviders.of(this, mFactoy).get(MotToEditForLangueViewModel::class.java)
+        val mFactory = MotToEditForLangueViewModel.Factory(this, -1, newWord, application)
+        mMotToEditForLangueViewModel = ViewModelProviders.of(this, mFactory).get(MotToEditForLangueViewModel::class.java)
 
         setTheMot()
     }
 
     fun setTheMot() {
         motEn1E = findViewById<View>(R.id.moten1edit) as EditText
-
         motEn2E = findViewById<View>(R.id.moten2edit) as EditText
-
         tipoE = findViewById<View>(R.id.tipoedit) as EditText
-
         notaE = findViewById<View>(R.id.notaedit) as EditText
-
         idioma = findViewById<View>(R.id.idiomaedit) as EditText
         idioma.setText(langue)
     }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
     }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onBackPressed() {
         if (newWord) {
             mMotToEditForLangueViewModel.deleteMot()
-
         }
+
         finish()
     }
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_editing, menu)
         return true
     }
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
@@ -95,7 +79,7 @@ class EditActivityForLangue : AppCompatActivity(){
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
             R.id.acceptedit -> {
-                mMotToEditForLangueViewModel.saveTheMotToEdit()
+                mMotToEditForLangueViewModel.saveTheMotToEdit("")
                 finish()
                 return true
             }

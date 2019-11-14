@@ -8,6 +8,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".Utils.MyApplication"
         android:icon="@mipmap/icon_fillit"
         android:label="Fillit-tionary"
         android:theme="@style/AppTheme">
@@ -36,7 +37,7 @@
             android:name=".Activities.EditActivityForLangue"
             android:label="Fillit-tionary" />
         <activity
-            android:name=".Activities.QuizzMeActivity"
+            android:name=".Activities.QuizMeActivity"
             android:label="@string/quizz" />
         <activity
             android:name=".Activities.ResultsActivity"

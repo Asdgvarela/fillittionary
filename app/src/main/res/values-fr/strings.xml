@@ -65,15 +65,15 @@
 
     Pour ajouter une nouvelle langue dans votre liste, il faut ajouter un nouveau mot en cette langue, écrire le nom de la langue dans le champ approprié et voilà, la nouvelle langue apparait avec les autres.</string>
     <string name="pre_text_view">NOUVELLE FONCTION !!!</string>
-    <string name="empezarQuizz">Êtes-vous prêt pour commencer ?</string>
+    <string name="empezarQuiz">Êtes-vous prêt pour commencer ?</string>
     <string name="listo">Allez !</string>
     <string name="todaviaNo">Pas encore</string>
     <string name="resultados">Résultat</string>
     <string name="fraseResultados">Le résultat de ton quiz en</string>
     <string name="fraseResultados2">est</string>
     <string name="quizzHint">Écrivez ici votre réponse</string>
-    <string name="botonQuizz">ALLEZ !</string>
-    <string name="repetirQuizz">Voulez-vous répéter le quiz ?</string>
+    <string name="botonQuiz">ALLEZ !</string>
+    <string name="repetirQuiz">Voulez-vous répéter le quiz ?</string>
     <string name="preguntaResults">Voulez-vous voir comment vous l\'avez fait ?</string>
     <string name="acierto">Bien joué !</string>
     <string name="error">Erreur!</string>
@@ -103,5 +103,7 @@
     <string name="idiomaVacio">Il faut écrire le nom de la langue !</string>
     <string name="avisoDeCorrupcion">Un des mots n\'avait pas de langue. Ce a été deleté.</string>
     <string name="no_record_allowed">Le permis pour enregistrer l\'audio doit être accepté.</string>
+
+    <string name="funcion_desactivada">Fonction temporairement désactivée</string>
 
 </resources>

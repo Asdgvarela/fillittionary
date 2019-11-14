@@ -13,20 +13,20 @@ import java.io.File
 
 class CloserLookModelImpl(val context: Context): MainContract.CloserLook.ModelCallback {
     override fun updateSound(listener: MainContract.CloserLook.ModelCallback.OnFinishedLoadingMot, mSound: Mot, id: Long) {
-
-        if (mSound.sonido.equals("")) {
-                val sd = File(mSound.sonido)
-                sd.delete()
-        }
-
-        DataManager.updateParoles(id, mSound, context)
-
-        listener.onFinished(mSound)
+//
+//        if (mSound.sonido.equals("")) {
+//                val sd = File(mSound.sonido)
+//                sd.delete()
+//        }
+//
+//        DataManager.updateParoles(mSound, context)
+//
+//        listener.onFinished(mSound)
     }
 
     override fun getTheMot(listener: MainContract.CloserLook.ModelCallback.OnFinishedLoadingMot, id: Long) {
-        val mot: Mot = DataManager.palabra(id, context)
-
-        listener.onFinished(mot)
+//        val mot: Mot = DataManager.palabra(id, context)
+//
+//        listener.onFinished(mot)
     }
 }

@@ -24,7 +24,7 @@
     -->
     <item
         android:id="@+id/quizzme"
-        android:title="Quizz"
+        android:title="Quiz"
         android:icon="@android:drawable/btn_star_big_on"
         android:orderInCategory="100"
         app:showAsAction="ifRoom" />

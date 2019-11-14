@@ -4,26 +4,45 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.maangata.fillit_tionary.Data.DataManager
 import com.maangata.fillit_tionary.Model.Mot
+import java.io.File
 
 class CloserLookViewModel(var app: Application, var id: Long): AndroidViewModel(app) {
 
-    var mCloserLookViewModel: MutableLiveData<Mot> = MutableLiveData()
+    private val dataManager = DataManager(app)
+    var mInitialLiveData: LiveData<Mot>
+    var mCloserLookViewModel = MutableLiveData<Mot>()
+    var mMediatorLiveData = MediatorLiveData<Mot>()
 
     init {
-        mCloserLookViewModel = DataManager.getPalabra(id, app.applicationContext)
-    }
-
-    fun getCloserViewViewModel(): LiveData<Mot> {
-        return mCloserLookViewModel
+        mInitialLiveData = dataManager.getPalabra(id)
+        mMediatorLiveData.addSource(mInitialLiveData) {
+            mCloserLookViewModel.value = it
+        }
     }
 
     fun refreshViewModel() {
-        mCloserLookViewModel.value = DataManager.getPalabra(id, app.applicationContext).value
+        mCloserLookViewModel.value = dataManager.getPalabra(id).value
     }
 
-    fun deleteMot() {
-        DataManager.delete(id, app.applicationContext)
+    fun deleteMot(mot: Mot) {
+        dataManager.delete(mot)
         refreshViewModel()
+    }
+
+    fun setTheSound(sound: String) {
+        mCloserLookViewModel.value!!.sonido = sound
+    }
+
+    fun updateMot() {
+        dataManager.updateParoles(mCloserLookViewModel.value!!)
+    }
+
+    fun removeSound() {
+        val forSound = File(mCloserLookViewModel.value!!.sonido)
+        forSound.delete()
+
+        mCloserLookViewModel.value!!.sonido = ""
+        dataManager.updateParoles(mCloserLookViewModel.value!!)
     }
 
     /**

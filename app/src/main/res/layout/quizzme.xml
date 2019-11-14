@@ -27,7 +27,7 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/okButtonQuizz"
+            android:id="@+id/okButtonQuiz"
             android:layout_below="@+id/editAnswer"
             android:layout_alignParentEnd="true"
             android:src="@android:drawable/ic_media_play"
@@ -43,8 +43,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/counterQuizz"
-            android:layout_below="@id/okButtonQuizz"
+            android:id="@+id/counterQuiz"
+            android:layout_below="@id/okButtonQuiz"
             android:paddingTop="15dp"
             android:paddingStart="5dp"
             android:textSize="20sp"/>
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/needAHint"
-            android:layout_below="@id/counterQuizz"
+            android:layout_below="@id/counterQuiz"
             android:paddingLeft="5dp"
             android:paddingTop="30dp"
             android:textSize="15sp"

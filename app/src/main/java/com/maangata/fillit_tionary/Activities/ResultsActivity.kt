@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.maangata.fillit_tionary.R
+import com.maangata.fillit_tionary.Utils.QuizHelper
 
 import java.util.ArrayList
 import java.util.Arrays
@@ -19,28 +20,27 @@ import java.util.Arrays
  */
 class ResultsActivity : AppCompatActivity() {
 
-    lateinit var idioma: String
-    lateinit internal var field1: TextView
-    lateinit internal var field2: TextView
-    lateinit internal var field3: TextView
-    lateinit internal var field4: TextView
-    lateinit internal var field5: TextView
-    lateinit internal var buttonBack: FloatingActionButton
-    lateinit internal var buttonDetails: FloatingActionButton
-    lateinit internal var resultados: String
-    internal var aciertos: Int = 0
-    internal var intentos: Int = 0
+    private lateinit var idioma: String
+    private lateinit var field1: TextView
+    private lateinit var field2: TextView
+    private lateinit var field3: TextView
+    private lateinit var field4: TextView
+    private lateinit var field5: TextView
+    private lateinit var buttonBack: FloatingActionButton
+    private lateinit var buttonDetails: FloatingActionButton
+    private lateinit var resultados: ArrayList<QuizHelper.QuizTrials>
+    private var aciertos: Int = 0
+    private var intentos: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.results_layout)
 
         val intentBack = intent
-        idioma = intentBack.getStringExtra("langue")
+        idioma = intentBack.getStringExtra("langue")!!
         aciertos = intentBack.getIntExtra("aciertos", 0)
         intentos = intentBack.getIntExtra("intentos", 0)
-        val tanteoAciertos = intentBack.getStringExtra("aciertosString")
-        resultados = arrayTanteo(tanteoAciertos)
+        resultados = intentBack.getParcelableArrayListExtra("aciertosString")!!
 
         field1 = findViewById<View>(R.id.firstResultsBox) as TextView
         field1.text =
@@ -48,10 +48,10 @@ class ResultsActivity : AppCompatActivity() {
         field2 = findViewById<View>(R.id.secondResultsBox) as TextView
         field2.text = "$aciertos/$intentos"
         field3 = findViewById<View>(R.id.thirdResultsBox) as TextView
-        field3.text = getString(R.string.repetirQuizz)
+        field3.text = getString(R.string.repetirQuiz)
         buttonBack = findViewById<View>(R.id.buttonBack) as FloatingActionButton
         buttonBack.setOnClickListener {
-            val intBack = Intent(this@ResultsActivity, QuizzMeActivity::class.java)
+            val intBack = Intent(this@ResultsActivity, QuizMeActivity::class.java)
             intBack.putExtra(Intent.EXTRA_TEXT, idioma)
             startActivity(intBack)
             finish()
@@ -62,7 +62,7 @@ class ResultsActivity : AppCompatActivity() {
         buttonDetails = findViewById<View>(R.id.buttonDetalleResults) as FloatingActionButton
         buttonDetails.setOnClickListener {
             field5 = findViewById<View>(R.id.field5) as TextView
-            field5.text = resultados
+            field5.text = getResultsInAShowableWay(resultados)
         }
     }
 
@@ -74,30 +74,23 @@ class ResultsActivity : AppCompatActivity() {
         finish()
     }
 
-    /**
-     * I use it to turn the String I receive from the Quizz with the results into an ArrayList.
-     * @param string Contains the String to be turned into an ArrayList.
-     * @return The ArrayList.
-     */
-    fun arrayTanteo(string: String): String {
-
-        val temp1 = string.split("/////".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val stringList = ArrayList(Arrays.asList(*temp1))
-        var theString = getString(R.string.resultados) + ":\n"
-
-        for (i in stringList.indices) {
-            val chunks = stringList[i].split("\t".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-
-            if (chunks[1].toLowerCase() == chunks[2].toLowerCase()) {
-                val temp3 = chunks[0] + "\t\t\t" + chunks[1] + "\t\t->  " + getString(R.string.acierto) + "\n"
-                theString = theString + temp3
-
-            } else {
-                val temp3 = chunks[0] + "\t\t\t" + chunks[1] + "\t\t->  " + getString(R.string.error) + "\n"
-                theString = theString + temp3
-            }
+    private fun getResultsInAShowableWay(mList: ArrayList<QuizHelper.QuizTrials>): String {
+        var mResult = getString(R.string.resultados) + ":\n"
+        for (trial in mList) {
+            mResult += getResultFromTrial(trial)
         }
-        return theString
+        return mResult
+    }
+
+    private fun getResultFromTrial(mTrial: QuizHelper.QuizTrials): String {
+        var mWord = mTrial.trueWord + "\t\t\t" + mTrial.trueTranslation + "\t\t->  "
+        mWord += if (mTrial.trueTranslation.equals(mTrial.trial)) {
+            getString(R.string.acierto) + "\n"
+        } else {
+            getString(R.string.error) + "\n"
+        }
+
+        return mWord
     }
 
     fun shareTheWord() {
@@ -122,7 +115,6 @@ class ResultsActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         val idm = item.itemId
 
-
         if (idm == R.id.share_button_results) {
             shareTheWord()
             return true
@@ -130,5 +122,4 @@ class ResultsActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
-
 }

@@ -18,5 +18,7 @@ object Constants {
     const val OK = "OK"
     const val DELETE = 0
     const val DONT_DELETE = 1
+    const val DB_NAME = "fillittionary"
+    const val DB_SQL_VERSION = 3
 
 }

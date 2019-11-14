@@ -67,15 +67,15 @@
     Para añadir un idioma nuevo sólo tienes que añadir una palabra y escribir el idioma al que pertenece en el campo adecuado. Desde entonces aparecerá como un idioma más.
 
     <string name="pre_text_view">NUEVA FUNCIONALIDAD!!</string>
-    <string name="empezarQuizz">¿Estás listo para empezar?</string>
+    <string name="empezarQuiz">¿Estás listo para empezar?</string>
     <string name="listo">¡Listo!</string>
     <string name="todaviaNo">Aún no</string>
     <string name="resultados">Resultados</string>
     <string name="fraseResultados">El resultado de tu quiz en</string>
     <string name="fraseResultados2">es</string>
     <string name="quizzHint">Escribe aquí tu respuesta</string>
-    <string name="botonQuizz">¡SIGUIENTE!</string>
-    <string name="repetirQuizz">¿Quieres volver a hacer el quiz?</string>
+    <string name="botonQuiz">¡SIGUIENTE!</string>
+    <string name="repetirQuiz">¿Quieres volver a hacer el quiz?</string>
     <string name="preguntaResults">¿Quieres ver cómo lo has hecho?</string>
     <string name="acierto">¡Bien!</string>
     <string name="error">¡Error!</string>
@@ -106,5 +106,7 @@
     <string name="avisoDeCorrupcion">Una de las palabras no tenía idioma. Se ha eliminado.</string>
 
     <string name="no_record_allowed">Debes aceptar el permiso para que tu dispositivo grabe audio.</string>
+
+    <string name="funcion_desactivada">Función temporalmente desactivada.</string>
 
 </resources>

@@ -65,15 +65,15 @@
 
     In order to add a new language you have to add a new word, and write the language it belongs to in the right field. From that moment on that language will appear with the others and you\'ll only have to fill it with words!.</string>
     <string name="pre_text_view">NEW FEATURE!!</string>
-    <string name="empezarQuizz">Are you ready for the quiz?</string>
+    <string name="empezarQuiz">Are you ready for the quiz?</string>
     <string name="listo">Ready!</string>
     <string name="todaviaNo">Not yet</string>
     <string name="resultados">Results</string>
     <string name="fraseResultados">The results of your quiz in</string>
     <string name="fraseResultados2">are</string>
     <string name="quizzHint">Write your answer here</string>
-    <string name="botonQuizz">GO!</string>
-    <string name="repetirQuizz">Do you want to take the quiz again?</string>
+    <string name="botonQuiz">GO!</string>
+    <string name="repetirQuiz">Do you want to take the quiz again?</string>
     <string name="preguntaResults">Do you want to see all your results?</string>
     <string name="acierto">Well done!</string>
     <string name="error">Error!</string>
@@ -104,5 +104,7 @@
     <string name="avisoDeCorrupcion">One of the words had no language. It\'s been erased.</string>
 
     <string name="no_record_allowed">You must allow permission record audio to your mobile device.</string>
+
+    <string name="funcion_desactivada">Temporarily out of order</string>
 
 </resources>

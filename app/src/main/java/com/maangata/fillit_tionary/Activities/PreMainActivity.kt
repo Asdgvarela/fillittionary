@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -44,75 +45,56 @@ class PreMainActivity : AppCompatActivity() {
         iniciaLangues()
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     fun iniciaLangues() {
         langueViewModel = ViewModelProviders.of(this).get(LanguesViewModel::class.java)
+        langueViewModel.mMediator.observe(this, Observer { })
         langueViewModel.getTheViewModel().observe(this, Observer<ArrayList<String>> {
             if (it != null) {
-                mAdapter.arl = it
-                mAdapter.notifyDataSetChanged()
+                mAdapter.setList(it)
             }
         })
 
-        mAdapter = AdaptadorPremain(this@PreMainActivity, langueViewModel.getTheViewModel().value!!)
+        mAdapter = AdaptadorPremain(this@PreMainActivity)
         listView.adapter = mAdapter
     }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         langueViewModel.refreshLangues()
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    fun ajouterMotForLangue() {
-        Utils.addWordForLanguage(this@PreMainActivity)
+    private fun ajouterMotForLangue() {
+        Utils.addWordForLanguage(this@PreMainActivity, application)
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    fun lanzarBuscarPalabra() {
-        Utils.searchWord(this@PreMainActivity)
+    private fun lanzarBuscarPalabra() {
+        Utils.searchWord(this@PreMainActivity, application)
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    fun exportDB(): Boolean {
-        return Utils.exportData(this@PreMainActivity)
+    private fun exportDB() {
+        Toast.makeText(this@PreMainActivity, getString(R.string.funcion_desactivada), Toast.LENGTH_LONG).show()
+//        return Utils.exportData(this@PreMainActivity)
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    fun importDB() {
-        Utils.importData(this@PreMainActivity)
+    private fun importDB() {
+        Toast.makeText(this@PreMainActivity, getString(R.string.funcion_desactivada), Toast.LENGTH_LONG).show()
+//        Utils.importData(this@PreMainActivity)
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    fun emailDB() {
+    private fun emailDB() {
         Utils.emailDb(this@PreMainActivity)
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    fun launchHelp() {
+    private fun launchHelp() {
         val i = Intent(this@PreMainActivity, Help::class.java)
         startActivity(i)
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_premain, menu)
         return true
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 

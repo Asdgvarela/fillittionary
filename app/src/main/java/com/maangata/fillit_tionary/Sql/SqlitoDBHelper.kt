@@ -4,6 +4,8 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.maangata.fillit_tionary.Utils.Constants.DB_NAME
+import com.maangata.fillit_tionary.Utils.Constants.DB_SQL_VERSION
 
 /**
  * Created by zosdam on 1/09/15.
@@ -24,7 +26,7 @@ class SqlitoDBHelper
  */
     (contexto: Context)
 /** This the DB version number */
-    : SQLiteOpenHelper(contexto, "fillittionary", null, 3) {
+    : SQLiteOpenHelper(contexto, DB_NAME, null, DB_SQL_VERSION) {
 
     /**
      * Creo la base de datos propiamente dicha. Con sus columnas, el tipo de datos que alberga y tal.
@@ -38,6 +40,7 @@ class SqlitoDBHelper
      */
 
     // In case I added more fields to the DB, I have to REMEMBER THAT IN PREMAINACTIVITY I SHOULD CHANGE THE OF COLUMNS THE CURSOR HAS. I the method IniciaLangues().
+
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(

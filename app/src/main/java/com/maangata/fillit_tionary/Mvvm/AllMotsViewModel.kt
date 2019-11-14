@@ -1,35 +1,32 @@
 package com.maangata.fillit_tionary.Mvvm
 
 import android.app.Application
-import android.database.Cursor
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.maangata.fillit_tionary.Data.DataManager
-import androidx.lifecycle.ViewModel
-import androidx.annotation.NonNull
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.maangata.fillit_tionary.Model.Mot
 
+class AllMotsViewModel(var app: Application, private var mLangue: String): AndroidViewModel(app) {
 
-class AllMotsViewModel(var app: Application, var mLangue: String): AndroidViewModel(app) {
-
-    var allMotsViewModel: MutableLiveData<ArrayList<Mot>>
+    private val dataManager = DataManager(app)
+    private val mInitialLiveData: LiveData<List<Mot>>
+    private var allMotsViewModel: MutableLiveData<List<Mot>> = MutableLiveData()
+    var mMediator = MediatorLiveData<List<Mot>>()
 
     init {
-        allMotsViewModel = DataManager.getTheMotsList(mLangue, app.applicationContext)
+        mInitialLiveData = dataManager.getTheMotsList(mLangue)
+        mMediator.addSource(mInitialLiveData) {
+            allMotsViewModel.value = it
+        }
     }
 
-    fun getAllMotsViewModel(): LiveData<ArrayList<Mot>> {
+    fun getAllMotsViewModel(): LiveData<List<Mot>> {
         return allMotsViewModel
     }
 
     fun refreshViewModel() {
-        allMotsViewModel.value = DataManager.getTheMotsList(mLangue, app.applicationContext).value
+        allMotsViewModel.value = dataManager.getTheMotsList(mLangue).value
     }
-    /**
-     * A creator is used to inject the project ID into the ViewModel
-     */
+
     class Factory(private val application: Application, private val mLangue: String) :
         ViewModelProvider.NewInstanceFactory() {
 
@@ -38,5 +35,4 @@ class AllMotsViewModel(var app: Application, var mLangue: String): AndroidViewMo
             return AllMotsViewModel(application, mLangue) as T
         }
     }
-
 }

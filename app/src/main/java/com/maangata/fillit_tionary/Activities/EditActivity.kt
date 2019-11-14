@@ -12,9 +12,6 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.maangata.fillit_tionary.Interfaces.MainContract
-import com.maangata.fillit_tionary.Mvp.MotToEditModelImpl
-import com.maangata.fillit_tionary.Mvp.MotToEditPresenterImpl
 import com.maangata.fillit_tionary.Model.MotsList
 import com.maangata.fillit_tionary.Mvvm.MotToEditViewModel
 import com.maangata.fillit_tionary.R
@@ -32,9 +29,10 @@ class EditActivity : AppCompatActivity() {
     lateinit var motEn2E: EditText
     lateinit var tipoE: EditText
     lateinit var notaE: EditText
-    private var id: Long = 0
+    var id: Long = 0
     lateinit var spinnerLangue: Spinner
     lateinit var langue: String
+    lateinit var sound: String
     var newWord: Boolean = false
     lateinit var mMotToEditViewModel: MotToEditViewModel
 
@@ -51,24 +49,30 @@ class EditActivity : AppCompatActivity() {
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun getTheMot(id: Long, newWord: Boolean) {
-        val mFactory = MotToEditViewModel.Factory(this, id, newWord)
-        mMotToEditViewModel = ViewModelProviders.of(this, mFactory).get(MotToEditViewModel::class.java)
-        mMotToEditViewModel.getMotToEditViewModel().observe(this, Observer {
+    private fun getTheMot(id: Long, newWord: Boolean) {
+        motEn1E = findViewById(R.id.moten1edit)
+        motEn2E = findViewById(R.id.moten2edit)
+        tipoE = findViewById(R.id.tipoedit)
+        notaE = findViewById(R.id.notaedit)
+        spinnerLangue = findViewById<View>(R.id.spinnerLangue) as Spinner
+
+        val mFactory = MotToEditViewModel.Factory(this@EditActivity, id, newWord, application)
+        mMotToEditViewModel = ViewModelProviders.of(this@EditActivity, mFactory).get(MotToEditViewModel::class.java)
+        mMotToEditViewModel.mMediatorLiveData.observe(this@EditActivity, Observer {})
+        mMotToEditViewModel.mMotToEditViewModel.observe(this@EditActivity, Observer {
             if (it != null) {
-                setTheMots(it)
+                sound = it.singleMot.sonido!!
+                if (it.langues.isNotEmpty()) {
+                    setTheMots(it)
+                }
             }
         })
     }
 
-    fun setTheMots(mMotsList: MotsList) {
-        motEn1E = findViewById(R.id.moten1edit)
+    private fun setTheMots(mMotsList: MotsList) {
         motEn1E.setText(mMotsList.singleMot.motEn1)
-        motEn2E = findViewById(R.id.moten2edit)
         motEn2E.setText(mMotsList.singleMot.motEn2)
-        tipoE = findViewById(R.id.tipoedit)
         tipoE.setText(mMotsList.singleMot.tipo)
-        notaE = findViewById(R.id.notaedit)
         notaE.setText(mMotsList.singleMot.nota)
 
         spinnerLangue = findViewById<View>(R.id.spinnerLangue) as Spinner
@@ -76,18 +80,22 @@ class EditActivity : AppCompatActivity() {
         spinAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerLangue.adapter = spinAdapt
 
-        val setLang = mMotsList.singleMot.idioma.toUpperCase()
-        if (setLang == "") {
-            val spinnerPos = mMotsList.langues.lastIndexOf(langue)
-            spinnerLangue.setSelection(spinnerPos)
+        val setLang = mMotsList.singleMot.idioma!!.toUpperCase()
+        when (setLang) {
+            "" -> {
+                val spinnerPos = mMotsList.langues.lastIndexOf(langue)
+                spinnerLangue.setSelection(spinnerPos)
 
-        } else if (setLang == "-") {
-            val spinnerPos = mMotsList.langues.lastIndexOf(langue)
-            spinnerLangue.setSelection(spinnerPos)
+            }
+            "-" -> {
+                val spinnerPos = mMotsList.langues.lastIndexOf(langue)
+                spinnerLangue.setSelection(spinnerPos)
 
-        } else {
-            val spinnerPos = mMotsList.langues.lastIndexOf(langue)
-            spinnerLangue.setSelection(spinnerPos)
+            }
+            else -> {
+                val spinnerPos = mMotsList.langues.lastIndexOf(langue)
+                spinnerLangue.setSelection(spinnerPos)
+            }
         }
 
         spinnerLangue.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -102,14 +110,13 @@ class EditActivity : AppCompatActivity() {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        mMotToEditViewModel.refreshData()
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onBackPressed() {
         if (intent.extras!!.getBoolean(NUEVO, false)) {
-            mMotToEditViewModel.deleteMot()
+            mMotToEditViewModel.deleteMot(mMotToEditViewModel.mMotToEditViewModel.value!!.singleMot)
         }
         finish()
     }
@@ -126,15 +133,14 @@ class EditActivity : AppCompatActivity() {
         val idm = item.itemId
 
         if (idm == R.id.acceptedit) {
-            saveTheMot()
+            saveTheMot(sound)
 
             return true
         }
 
         if (idm == R.id.canceledit) {
             if (intent.extras!!.getBoolean(NUEVO, false)) {
-                mMotToEditViewModel.deleteMot()
-                finish()
+                deleteMot()
             } else {
                 finish()
             }
@@ -145,8 +151,13 @@ class EditActivity : AppCompatActivity() {
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun saveTheMot() {
-        mMotToEditViewModel.saveTheMotToEdit()
+    private fun saveTheMot(sound: String) {
+        mMotToEditViewModel.saveTheMotToEdit(sound)
+        finish()
+    }
+
+    private fun deleteMot() {
+        mMotToEditViewModel.deleteMot(mMotToEditViewModel.mMotToEditViewModel.value!!.singleMot)
         finish()
     }
 }

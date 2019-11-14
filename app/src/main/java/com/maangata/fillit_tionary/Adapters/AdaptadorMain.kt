@@ -12,10 +12,10 @@ import com.maangata.fillit_tionary.R
 /**
  * Created by zosdam on 1/09/15.
  */
-class AdaptadorMain(val mContext: Context, var mList: ArrayList<Mot>) : BaseAdapter() {
+class AdaptadorMain(val mContext: Context) : BaseAdapter() {
 
     private lateinit var mMot: Mot
-
+    var mList: List<Mot> = ArrayList()
     override fun getView(position: Int, view: View?, viewGroup: ViewGroup?): View {
         var row: View? = view
         mMot = mList[position]
@@ -44,35 +44,17 @@ class AdaptadorMain(val mContext: Context, var mList: ArrayList<Mot>) : BaseAdap
     }
 
     override fun getItemId(p0: Int): Long {
-        return mList[p0].id
+        return mList[p0].id!!
     }
 
     override fun getCount(): Int {
         return mList.size
     }
-//
-//    override fun bindView(vista: View, contexto: Context, c: Cursor) {
-//        funcion = vista.findViewById<View>(R.id.func) as TextView
-//        val temp = c.getString(c.getColumnIndex("funcion")).substring(
-//            0,
-//            1
-//        ) + c.getString(c.getColumnIndex("funcion")).substring(1)
-//        funcion.text = temp //** Also used here getColumnIndex insted of this one*/
-//
-//        motEn1 = vista.findViewById<View>(R.id.firstcol) as TextView
-//        val temp1 = c.getString(c.getColumnIndex("palabra")).substring(
-//            0,
-//            1
-//        ) + c.getString(c.getColumnIndex("palabra")).substring(1)
-//        motEn1.text = temp1
-//
-//        motEn2 = vista.findViewById<View>(R.id.secondcol) as TextView
-//        val temp2 = c.getString(c.getColumnIndex("traduccion")).substring(
-//            0,
-//            1
-//        ) + c.getString(c.getColumnIndex("traduccion")).substring(1)
-//        motEn2.text = temp2
-//    }
+
+    fun setList(mList: List<Mot>) {
+        this.mList = mList
+        notifyDataSetChanged()
+    }
 
     private inner class ViewHolder(view: View) {
         var motEn1: TextView = view.findViewById(R.id.firstcol)

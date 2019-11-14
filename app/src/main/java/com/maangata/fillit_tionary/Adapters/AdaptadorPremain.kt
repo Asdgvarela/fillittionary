@@ -14,9 +14,10 @@ import java.util.ArrayList
 /**
  * Created by zosdam on 23/12/15.
  */
-class AdaptadorPremain(var mContext: Context, var arl: ArrayList<String>): BaseAdapter() {
+class AdaptadorPremain(var mContext: Context): BaseAdapter() {
 
     var langue: String = ""
+    var arl: ArrayList<String> = ArrayList()
 
     override fun getView(position: Int, view: View?, viewGroup: ViewGroup?): View {
         var row: View? = view
@@ -49,6 +50,11 @@ class AdaptadorPremain(var mContext: Context, var arl: ArrayList<String>): BaseA
 
     override fun getCount(): Int {
         return arl.size
+    }
+
+    fun setList(mList: ArrayList<String>) {
+        arl = mList
+        notifyDataSetChanged()
     }
 
     private inner class ViewHolder(view: View) {
